@@ -5,7 +5,7 @@ $tokenCSRF = Utiles::obtenerTokenCSRF();
 
 <div class="row">
     <div class="col-sm">
-        <h1>Clientes</h1>
+        <h3>Clientes</h3>
         <p>Aquí aparecen los clientes</p>
     </div>
 </div>
@@ -30,6 +30,10 @@ $tokenCSRF = Utiles::obtenerTokenCSRF();
                 <tr>
                     <th>#</th>
                     <th>Cliente</th>
+                    <th>Dirección</th>
+                    <th>Telefono</th>
+                    <th>Email</th>
+                    <!--<th>Fecha Registro</th>-->
                     <th>Editar</th>
                     <th>Eliminar</th>
                 </tr>
@@ -39,6 +43,10 @@ $tokenCSRF = Utiles::obtenerTokenCSRF();
                     <tr>
                         <td><?php echo $cliente->id ?></td>
                         <td><?php echo htmlentities($cliente->razonSocial) ?></td>
+                        <td><?php echo htmlentities($cliente->direccion) ?></td>
+                        <td><?php echo htmlentities($cliente->telefono) ?></td>
+                        <td><?php echo htmlentities($cliente->email) ?></td>
+                        <!--<td><?php echo htmlentities($cliente->fechaRegistro) ?></td>-->
                         <td>
                             <a class="btn btn-warning"
                                href="<?php echo BASE_URL ?>/?p=editar_cliente&id=<?php echo $cliente->id ?>">

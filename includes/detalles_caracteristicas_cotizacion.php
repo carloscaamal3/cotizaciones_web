@@ -72,6 +72,11 @@ $tokenCSRF = Utiles::obtenerTokenCSRF();
                                     </tbody>
                                     <tfoot>
                                     <tr>
+                                        <td><strong>IVA</strong></td>
+                                        <td class="text-nowrap"><strong>{{<?php echo htmlentities($iva) ?> |
+                                                iva}}</strong></td>
+                                    </tr>
+                                      <tr>
                                         <td><strong>Total</strong></td>
                                         <td class="text-nowrap"><strong>{{<?php echo htmlentities($costoTotal) ?> |
                                                 dinero}}</strong></td>
@@ -103,6 +108,14 @@ $tokenCSRF = Utiles::obtenerTokenCSRF();
                             <label for="tiempoEnMinutos">Tiempo</label>
                             <input name="tiempoEnMinutos" autocomplete="off" required type="number" class="form-control"
                                    id="tiempoEnMinutos" placeholder="Cantidad de tiempo que tomará el servicio">
+                        </div>
+                         <div class="form-group">
+                            <label for="iva">% IVA</label>
+                            <select required class="form-control" name="iva" id="iva">
+                                <option value="1">0.0%</option>
+                                <option value="2">0.8%</option>
+                                <option value="3">0.16%</option>
+                            </select>
                         </div>
                         <div class="form-group">
                             <label for="multiplicador">Especificado en</label>

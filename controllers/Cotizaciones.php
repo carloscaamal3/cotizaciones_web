@@ -52,7 +52,7 @@ from caracteristicas_cotizaciones
     public static function serviciosPorId($idCotizacion)
     {
         $bd = BD::obtener();
-        $sentencia = $bd->prepare("select servicios_cotizaciones.id, servicio, costo, tiempoEnMinutos, multiplicador
+        $sentencia = $bd->prepare("select servicios_cotizaciones.id, servicio, costo, tiempoEnMinutos, multiplicador, iva
 from servicios_cotizaciones
        inner join cotizaciones on cotizaciones.id = servicios_cotizaciones.idCotizacion and cotizaciones.id = ?
                                     and cotizaciones.idUsuario = ?;");
