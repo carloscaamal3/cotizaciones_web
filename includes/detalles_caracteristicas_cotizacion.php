@@ -11,6 +11,9 @@ if (!$cotizacion) {
 $servicios = Cotizaciones::serviciosPorId($_GET["id"]);
 $caracteristicas = Cotizaciones::caracteristicasPorId($_GET["id"]);
 $tokenCSRF = Utiles::obtenerTokenCSRF();
+
+
+
 ?>
 <div id="app">
     <div class="row">
@@ -40,6 +43,15 @@ $tokenCSRF = Utiles::obtenerTokenCSRF();
                                     $tiempoTotal = 0;
                                     ?>
                                     <?php
+                                    $ivaDefault = 0.16;
+                                    $ivaCal = 0;
+ 
+                                    // Obtener el valor de IVA del request o usar el valor predeterminado
+
+                                    $iva = isset($_GET['iva']) ? floatval($_GET['iva']) : $ivaDefault;
+
+    
+                                    $totalConIva = $costoTotal * (1 + $iva);
                                     foreach ($servicios as $servicio) {
                                         $costoTotal += $servicio->costo;
                                         $tiempoTotal += $servicio->tiempoEnMinutos * $servicio->multiplicador;
@@ -72,16 +84,40 @@ $tokenCSRF = Utiles::obtenerTokenCSRF();
                                     </tbody>
                                     <tfoot>
                                     <tr>
-                                        <td><strong>IVA</strong></td>
-                                        <td class="text-nowrap"><strong>{{<?php echo htmlentities($iva) ?> |
-                                                iva}}</strong></td>
+                                        <td>Seleccionar IVA</td>
+                                        <td  class="text-nowrap">  <select required class="form-control" name="iva" id="iva" onchange="actualizarTotal()">
+                                            <option value="0">0%</option>
+                                            <option value="0.008">8%</option>
+                                            <option value="0.16" selected>16%</option>
+                                        </select></td>
                                     </tr>
+                                    <tr>
+                                        <td><strong>% IVA</strong></td>
+                                          <!--<td><strong>IVA {{<?php echo htmlentities($iva * 100) ?>}} %</strong></td>-->
+                                       <!-- <td class="text-nowrap" ><strong>{{<?php echo htmlentities($costoTotal * $iva) ?> | dinero}}</strong></td>-->
+                                        <td class="text-nowrap" id="ivaCal" >{{<?php echo $ivaCal ?> | dinero}}</td>
+                                    </tr>
+                                    <tr>
+                                        <tr>
+                                            <td><strong>Subtotal</strong></td>
+                                           <!-- <td class="text-nowrap" id="totalConIva"><strong>{{<?php echo htmlentities($totalConIva) ?> | dinero}}</strong></td>-->
+                                           <td class="text-nowrap">{{<?php echo htmlentities($costoTotal) ?> | dinero}}</td>
+                                            <td colspan="5"></td>
+                                        </tr>
+                                        <!--<tr>
+                                            <td><strong>IVA</strong></td>
+                                        <td class="text-nowrap"><strong>{{<?php echo htmlentities($iva) ?> |
+                                        iva}}</strong></td>
+                                    </tr>-->
                                       <tr>
                                         <td><strong>Total</strong></td>
-                                        <td class="text-nowrap"><strong>{{<?php echo htmlentities($costoTotal) ?> |
-                                                dinero}}</strong></td>
+                                          <td class="text-nowrap" id="totalConIva">{{<?php echo htmlentities($totalConIva) ?> | dinero}}</td>
+                                        <!--<td class="text-nowrap"><strong>{{<?php echo htmlentities($costoTotal) ?> | dinero}}</strong></td>-->
                                         <td><strong>{{<?php echo $tiempoTotal ?> | minutosATiempo}}</strong></td>
-                                        <td colspan="2"></td>
+                                        <td> </td>
+                                    </tr>
+                                    <tr>
+                                          <td colspan="2"><button type="submit" class="btn btn-primary">Guardar</button></td>
                                     </tr>
                                     </tfoot>
                                 </table>
@@ -109,14 +145,6 @@ $tokenCSRF = Utiles::obtenerTokenCSRF();
                             <input name="tiempoEnMinutos" autocomplete="off" required type="number" class="form-control"
                                    id="tiempoEnMinutos" placeholder="Cantidad de tiempo que tomará el servicio">
                         </div>
-                         <div class="form-group">
-                            <label for="iva">% IVA</label>
-                            <select required class="form-control" name="iva" id="iva">
-                                <option value="1">0.0%</option>
-                                <option value="2">0.8%</option>
-                                <option value="3">0.16%</option>
-                            </select>
-                        </div>
                         <div class="form-group">
                             <label for="multiplicador">Especificado en</label>
                             <select required class="form-control" name="multiplicador" id="multiplicador">
@@ -128,7 +156,7 @@ $tokenCSRF = Utiles::obtenerTokenCSRF();
                                 <option value="518400">Años (12 meses)</option>
                             </select>
                         </div>
-                        <button type="submit" class="btn btn-primary">Guardar</button>
+                        <button type="submit" class="btn btn-primary">Agregar</button>
                     </form>
                 </div>
             </div>
@@ -187,7 +215,7 @@ $tokenCSRF = Utiles::obtenerTokenCSRF();
                             <input name="caracteristica" autocomplete="off" required type="text" class="form-control"
                                    id="caracteristica" placeholder="Algo que ayude a describir la cotización">
                         </div>
-                        <button type="submit" class="btn btn-primary">Guardar</button>
+                        <button type="submit" class="btn btn-primary">Agregar</button>
                     </form>
                 </div>
             </div>
@@ -200,4 +228,26 @@ $tokenCSRF = Utiles::obtenerTokenCSRF();
             el: "#app",
         });
     });
+</script>
+<script>
+    function actualizarTotal() {
+        var selectIva = document.getElementById('iva');
+        var ivaSeleccionado = parseFloat(selectIva.value) || parseFloat(<?php echo $ivaDefault; ?>);
+        console.log("ivaSeleccionado", ivaSeleccionado)
+        var totalSinIva = parseFloat(<?php echo $costoTotal; ?>);
+        var ivaCalculado2 = ivaSeleccionado * totalSinIva
+        var nuevoTotal = totalSinIva * (1 + ivaSeleccionado);
+
+        // Actualizar el total en la interfaz
+          document.getElementById('totalConIva').innerText = nuevoTotal.toLocaleString('es-MX', {
+            style: 'currency',
+            currency: 'MXN'
+        });
+
+          // Actualizar el total de IVA calculado en la interfaz
+        document.getElementById('ivaCal').innerText = ivaCalculado2.toLocaleString('es-MX', {
+            style: 'currency',
+            currency: 'MXN'
+        });
+    }
 </script>

@@ -123,7 +123,8 @@ from caracteristicas_cotizaciones
     {
         $bd = BD::obtener();
         $sentencia = $bd->prepare("select
-            cotizaciones.id, clientes.razonSocial, cotizaciones.descripcion, cotizaciones.fecha
+            cotizaciones.id, clientes.razonSocial, cotizaciones.descripcion, cotizaciones.fecha, 
+            cotizaciones.total
             from clientes inner join cotizaciones
             on cotizaciones.idCliente = clientes.id and cotizaciones.idUsuario = ?;");
         $sentencia->execute([SesionService::obtenerIdUsuarioLogueado()]);

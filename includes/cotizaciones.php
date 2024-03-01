@@ -32,6 +32,7 @@ $tokenCSRF = Utiles::obtenerTokenCSRF();
                     <th>Cliente</th>
                     <th>Descripción</th>
                     <th>Fecha</th>
+                    <th>Total</th>
                     <th>Detalles y características</th>
                     <th>Imprimir</th>
                     <th>Editar</th>
@@ -45,6 +46,7 @@ $tokenCSRF = Utiles::obtenerTokenCSRF();
                         <td><?php echo htmlentities($cotizacion->razonSocial) ?></td>
                         <td><?php echo htmlentities($cotizacion->descripcion) ?></td>
                         <td><?php echo htmlentities($cotizacion->fecha) ?></td>
+                        <td><?php echo htmlentities($cotizacion->total) ?></td>
                         <td>
                             <a class="btn btn-info"
                                href="<?php echo BASE_URL ?>/?p=detalles_caracteristicas_cotizacion&id=<?php echo $cotizacion->id ?>">
