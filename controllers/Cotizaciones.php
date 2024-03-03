@@ -123,14 +123,25 @@ from caracteristicas_cotizaciones
     {
         $bd = BD::obtener();
         $sentencia = $bd->prepare("select
-            cotizaciones.id, clientes.razonSocial, cotizaciones.descripcion, cotizaciones.fecha, 
-            cotizaciones.total
+            cotizaciones.id, clientes.razonSocial, cotizaciones.descripcion, cotizaciones.fecha
             from clientes inner join cotizaciones
             on cotizaciones.idCliente = clientes.id and cotizaciones.idUsuario = ?;");
         $sentencia->execute([SesionService::obtenerIdUsuarioLogueado()]);
         return $sentencia->fetchAll(PDO::FETCH_OBJ);
     }
-
+    public static function obtenerCotizacionesPaginadas($pagina_actual, $resultados_por_pagina)
+    {
+        $bd = BD::obtener();
+        $desplazamiento = ($pagina_actual - 1) * $resultados_por_pagina;
+        $sentencia = $bd->prepare("SELECT
+            cotizaciones.id, clientes.razonSocial, cotizaciones.descripcion, cotizaciones.fecha
+            FROM clientes INNER JOIN cotizaciones
+            ON cotizaciones.idCliente = clientes.id AND cotizaciones.idUsuario = ?
+            LIMIT ? OFFSET ?;");
+        $sentencia->execute([SesionService::obtenerIdUsuarioLogueado(), $resultados_por_pagina, $desplazamiento]);
+        return $sentencia->fetchAll(PDO::FETCH_OBJ);
+    }
+    
     public static function porId($id)
     {
         $bd = BD::obtener();
@@ -160,4 +171,26 @@ from caracteristicas_cotizaciones
         $sentencia = $bd->prepare("delete from cotizaciones where id = ? and idUsuario = ?;");
         return $sentencia->execute([$id, SesionService::obtenerIdUsuarioLogueado()]);
     }
+
+    // Función para buscar cotizaciones por término de búsqueda en cualquier campo
+// Función para buscar cotizaciones por término de búsqueda en cualquier campo
+public static function buscarCotizaciones() {
+    $termino_busqueda = isset($_GET['q']) ? $_GET['q'] : '';
+
+    if (!empty($termino_busqueda)) {
+        $bd = BD::obtener();
+        $sentencia = $bd->prepare("SELECT
+            cotizaciones.id, clientes.razonSocial, cotizaciones.descripcion, cotizaciones.fecha, cotizaciones.idCliente
+            FROM clientes INNER JOIN cotizaciones
+            ON cotizaciones.idCliente = clientes.id AND cotizaciones.idUsuario = ?
+            WHERE cotizaciones.id LIKE ? OR clientes.razonSocial LIKE ? OR cotizaciones.descripcion LIKE ? OR cotizaciones.fecha LIKE ?");
+        $idUsuario = SesionService::obtenerIdUsuarioLogueado();
+        $termino = "%$termino_busqueda%";
+        $sentencia->execute([$idUsuario, $termino, $termino, $termino, $termino]);
+        return $sentencia->fetchAll(PDO::FETCH_OBJ);
+    } else {
+        // Si no hay término de búsqueda, devuelve un array vacío
+        return [];
+    }
+}
 }

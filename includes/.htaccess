@@ -1,1 +1,13 @@
-deny from all
+# Denegar acceso a todos los archivos (comentado)
+# Deny from all
+
+# Permitir el acceso a tcpdf.php
+<Files "tcpdf/tcpdf.php">
+    Allow from all
+</Files>
+
+# O si estás usando Apache 2.4 o superior, podrías usar Require all granted
+<Files "tcpdf/tcpdf.php">
+    Require all granted
+</Files>
+

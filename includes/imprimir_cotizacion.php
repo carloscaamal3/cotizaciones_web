@@ -101,7 +101,7 @@ $ajustes = Ajustes::obtener();
     </div>
     <div class="row">
         <div class="col-sm">
-            <button @click="imprimir" class="btn btn-success d-print-none">Imprimir</button>
+            <button id="imprimir-btn" @click="imprimir" class="btn btn-success d-print-none">Imprimir</button>
         </div>
     </div>
     <div class="row">
@@ -110,8 +110,29 @@ $ajustes = Ajustes::obtener();
         </div>
     </div>
 </div>
+
+
+
 <script>
-    document.addEventListener("DOMContentLoaded", () => {
+    
+
+document.getElementById("imprimir-btn").addEventListener("click", function() {
+    // Realizar una solicitud AJAX al archivo generar_pdf.php
+    var xhr = new XMLHttpRequest();
+    xhr.open("GET", "includes/genera_pdf.php?id=<?php echo $_GET["id"]; ?>", true);
+    xhr.responseType = "blob"; // Esperamos una respuesta binaria
+    xhr.onload = function() {
+        if (this.status === 200) {
+            // Crear un objeto URL a partir de la respuesta binaria
+            var blob = new Blob([this.response], { type: "application/pdf" });
+            var url = window.URL.createObjectURL(blob);
+            // Abrir el PDF en una nueva pestaña
+            window.open(url);
+        }
+    };
+    xhr.send();
+});
+  /*  document.addEventListener("DOMContentLoaded", () => {
         new Vue({
             el: "#app",
             methods: {
@@ -123,5 +144,8 @@ $ajustes = Ajustes::obtener();
                 }
             },
         });
-    });
+    });*/
+
+
 </script>
+

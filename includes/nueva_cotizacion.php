@@ -1,6 +1,10 @@
 <?php
 $tokenCSRF = Utiles::obtenerTokenCSRF();
 $clientes = Clientes::todos();
+// Verificar si se ha enviado el formulario y mostrar el mensaje de alerta
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    echo '<div class="alert alert-success" role="alert">La cotización se ha guardado correctamente.</div>';
+}
 ?>
 <div class="row">
     <div class="col-sm">
