@@ -2,8 +2,6 @@
 if (
     empty($_POST["razonSocial"])
     ||
-    empty($_POST["id"])
-    ||
     empty($_POST["direccion"])  
     ||
     empty($_POST["telefono"])  

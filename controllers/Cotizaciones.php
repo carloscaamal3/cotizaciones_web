@@ -13,10 +13,10 @@ class Cotizaciones
     {
         $bd = BD::obtener();
         $sentencia = $bd->prepare("delete servicios_cotizaciones
-from servicios_cotizaciones
-       inner join cotizaciones on cotizaciones.idUsuario = ?
-                                    and
-                                  servicios_cotizaciones.id = ?");
+            from servicios_cotizaciones
+            inner join cotizaciones on cotizaciones.idUsuario = ?
+            and
+            servicios_cotizaciones.id = ?");
         return $sentencia->execute([SesionService::obtenerIdUsuarioLogueado(), $idServicio]);
     }
 
@@ -24,8 +24,8 @@ from servicios_cotizaciones
     {
         $bd = BD::obtener();
         $sentencia = $bd->prepare("delete caracteristicas_cotizaciones 
-from caracteristicas_cotizaciones 
-inner join cotizaciones on cotizaciones.idUsuario = ? and caracteristicas_cotizaciones.id = ?;");
+            from caracteristicas_cotizaciones 
+            inner join cotizaciones on cotizaciones.idUsuario = ? and caracteristicas_cotizaciones.id = ?;");
         return $sentencia->execute([SesionService::obtenerIdUsuarioLogueado(), $idCaracteristica]);
     }
 
@@ -33,8 +33,8 @@ inner join cotizaciones on cotizaciones.idUsuario = ? and caracteristicas_cotiza
     {
         $bd = BD::obtener();
         $sentencia = $bd->prepare("select servicios_cotizaciones.id, idCotizacion, servicio, costo, tiempoEnMinutos, multiplicador
-from servicios_cotizaciones
-       inner join cotizaciones on cotizaciones.idUsuario = ? and servicios_cotizaciones.id = ?");
+            from servicios_cotizaciones
+            inner join cotizaciones on cotizaciones.idUsuario = ? and servicios_cotizaciones.id = ?");
         $sentencia->execute([SesionService::obtenerIdUsuarioLogueado(), $idServicio]);
         return $sentencia->fetch(PDO::FETCH_OBJ);
     }
@@ -43,8 +43,8 @@ from servicios_cotizaciones
     {
         $bd = BD::obtener();
         $sentencia = $bd->prepare("select caracteristicas_cotizaciones.id, idCotizacion, caracteristica
-from caracteristicas_cotizaciones
-       inner join cotizaciones on cotizaciones.idUsuario = ? and caracteristicas_cotizaciones.id = ?");
+            from caracteristicas_cotizaciones
+            inner join cotizaciones on cotizaciones.idUsuario = ? and caracteristicas_cotizaciones.id = ?");
         $sentencia->execute([SesionService::obtenerIdUsuarioLogueado(), $idCaracteristica]);
         return $sentencia->fetch(PDO::FETCH_OBJ);
     }
@@ -53,9 +53,9 @@ from caracteristicas_cotizaciones
     {
         $bd = BD::obtener();
         $sentencia = $bd->prepare("select servicios_cotizaciones.id, servicio, costo, tiempoEnMinutos, multiplicador, iva
-from servicios_cotizaciones
-       inner join cotizaciones on cotizaciones.id = servicios_cotizaciones.idCotizacion and cotizaciones.id = ?
-                                    and cotizaciones.idUsuario = ?;");
+            from servicios_cotizaciones
+            inner join cotizaciones on cotizaciones.id = servicios_cotizaciones.idCotizacion and cotizaciones.id = ?
+            and cotizaciones.idUsuario = ?;");
         $sentencia->execute([$idCotizacion, SesionService::obtenerIdUsuarioLogueado()]);
         return $sentencia->fetchAll(PDO::FETCH_OBJ);
     }
@@ -64,8 +64,8 @@ from servicios_cotizaciones
     {
         $bd = BD::obtener();
         $sentencia = $bd->prepare("select caracteristicas_cotizaciones.id, idCotizacion, caracteristica
-from caracteristicas_cotizaciones
-       inner join cotizaciones on cotizaciones.id = caracteristicas_cotizaciones.idCotizacion and cotizaciones.id = ? and cotizaciones.idUsuario = ?;");
+            from caracteristicas_cotizaciones
+            inner join cotizaciones on cotizaciones.id = caracteristicas_cotizaciones.idCotizacion and cotizaciones.id = ? and cotizaciones.idUsuario = ?;");
         $sentencia->execute([$idCotizacion, SesionService::obtenerIdUsuarioLogueado()]);
         return $sentencia->fetchAll(PDO::FETCH_OBJ);
     }
@@ -74,7 +74,7 @@ from caracteristicas_cotizaciones
     {
         $bd = BD::obtener();
         $sentencia = $bd->prepare("insert into servicios_cotizaciones (idCotizacion, servicio, costo, tiempoEnMinutos, multiplicador)
-        values ((select id from cotizaciones where cotizaciones.idUsuario = ? and cotizaciones.id = ?), ?, ?, ?, ?);");
+            values ((select id from cotizaciones where cotizaciones.idUsuario = ? and cotizaciones.id = ?), ?, ?, ?, ?);");
         return $sentencia->execute([
             SesionService::obtenerIdUsuarioLogueado(),
             $idCotizacion,
@@ -89,9 +89,9 @@ from caracteristicas_cotizaciones
     {
         $bd = BD::obtener();
         $sentencia = $bd->prepare("insert into caracteristicas_cotizaciones
-        (idCotizacion, caracteristica)
-        values
-        ((select id from cotizaciones where cotizaciones.idUsuario = ? and cotizaciones.id = ?), ?);");
+            (idCotizacion, caracteristica)
+            values
+            ((select id from cotizaciones where cotizaciones.idUsuario = ? and cotizaciones.id = ?), ?);");
         return $sentencia->execute([SesionService::obtenerIdUsuarioLogueado(), $idCotizacion, $caracteristica]);
     }
 
@@ -99,12 +99,12 @@ from caracteristicas_cotizaciones
     {
         $bd = BD::obtener();
         $sentencia = $bd->prepare("update servicios_cotizaciones
-        inner join cotizaciones on servicios_cotizaciones.idCotizacion = cotizaciones.id and cotizaciones.idUsuario = ?
-        set servicio        = ?,
+            inner join cotizaciones on servicios_cotizaciones.idCotizacion = cotizaciones.id and cotizaciones.idUsuario = ?
+            set servicio        = ?,
             costo           = ?,
             tiempoEnMinutos = ?,
             multiplicador   = ?
-        where servicios_cotizaciones.id = ?;");
+            where servicios_cotizaciones.id = ?;");
         return $sentencia->execute([SesionService::obtenerIdUsuarioLogueado(), $servicio, $costo, $tiempoEnMinutos, $multiplicador, $idServicio]);
     }
 
@@ -112,10 +112,10 @@ from caracteristicas_cotizaciones
     {
         $bd = BD::obtener();
         $sentencia = $bd->prepare("update caracteristicas_cotizaciones
-        inner join cotizaciones on caracteristicas_cotizaciones.idCotizacion = cotizaciones.id and cotizaciones.idUsuario = ?
-        set
-        caracteristica = ?
-        where caracteristicas_cotizaciones.id = ?;");
+            inner join cotizaciones on caracteristicas_cotizaciones.idCotizacion = cotizaciones.id and cotizaciones.idUsuario = ?
+            set
+            caracteristica = ?
+            where caracteristicas_cotizaciones.id = ?;");
         return $sentencia->execute([SesionService::obtenerIdUsuarioLogueado(), $caracteristica, $idCaracteristica]);
     }
 
@@ -129,19 +129,7 @@ from caracteristicas_cotizaciones
         $sentencia->execute([SesionService::obtenerIdUsuarioLogueado()]);
         return $sentencia->fetchAll(PDO::FETCH_OBJ);
     }
-    public static function obtenerCotizacionesPaginadas($pagina_actual, $resultados_por_pagina)
-    {
-        $bd = BD::obtener();
-        $desplazamiento = ($pagina_actual - 1) * $resultados_por_pagina;
-        $sentencia = $bd->prepare("SELECT
-            cotizaciones.id, clientes.razonSocial, cotizaciones.descripcion, cotizaciones.fecha
-            FROM clientes INNER JOIN cotizaciones
-            ON cotizaciones.idCliente = clientes.id AND cotizaciones.idUsuario = ?
-            LIMIT ? OFFSET ?;");
-        $sentencia->execute([SesionService::obtenerIdUsuarioLogueado(), $resultados_por_pagina, $desplazamiento]);
-        return $sentencia->fetchAll(PDO::FETCH_OBJ);
-    }
-    
+
     public static function porId($id)
     {
         $bd = BD::obtener();
@@ -158,10 +146,10 @@ from caracteristicas_cotizaciones
     {
         $bd = BD::obtener();
         $sentencia = $bd->prepare("update cotizaciones set
-        idCliente = ?,
-        descripcion = ?,
-        fecha = ?
-        where id = ? and idUsuario = ?");
+            idCliente = ?,
+            descripcion = ?,
+            fecha = ?
+            where id = ? and idUsuario = ?");
         return $sentencia->execute([$idCliente, $descripcion, $fecha, $id, SesionService::obtenerIdUsuarioLogueado()]);
     }
 
@@ -171,26 +159,39 @@ from caracteristicas_cotizaciones
         $sentencia = $bd->prepare("delete from cotizaciones where id = ? and idUsuario = ?;");
         return $sentencia->execute([$id, SesionService::obtenerIdUsuarioLogueado()]);
     }
-
-    // Función para buscar cotizaciones por término de búsqueda en cualquier campo
-// Función para buscar cotizaciones por término de búsqueda en cualquier campo
-public static function buscarCotizaciones() {
-    $termino_busqueda = isset($_GET['q']) ? $_GET['q'] : '';
-
-    if (!empty($termino_busqueda)) {
+    //obtener por paginacion
+    public static function obtenerCotizacionesPaginadas($pagina_actual, $resultados_por_pagina)
+    {
         $bd = BD::obtener();
+        $desplazamiento = ($pagina_actual - 1) * $resultados_por_pagina;
         $sentencia = $bd->prepare("SELECT
-            cotizaciones.id, clientes.razonSocial, cotizaciones.descripcion, cotizaciones.fecha, cotizaciones.idCliente
+            cotizaciones.id, clientes.razonSocial, cotizaciones.descripcion, cotizaciones.fecha
             FROM clientes INNER JOIN cotizaciones
             ON cotizaciones.idCliente = clientes.id AND cotizaciones.idUsuario = ?
-            WHERE cotizaciones.id LIKE ? OR clientes.razonSocial LIKE ? OR cotizaciones.descripcion LIKE ? OR cotizaciones.fecha LIKE ?");
-        $idUsuario = SesionService::obtenerIdUsuarioLogueado();
-        $termino = "%$termino_busqueda%";
-        $sentencia->execute([$idUsuario, $termino, $termino, $termino, $termino]);
+            LIMIT ? OFFSET ?;");
+        $sentencia->execute([SesionService::obtenerIdUsuarioLogueado(), $resultados_por_pagina, $desplazamiento]);
         return $sentencia->fetchAll(PDO::FETCH_OBJ);
-    } else {
-        // Si no hay término de búsqueda, devuelve un array vacío
-        return [];
     }
-}
+    
+
+// Función para buscar cotizaciones por término de búsqueda en cualquier campo
+    public static function buscarCotizaciones() {
+        $termino_busqueda = isset($_GET['q']) ? $_GET['q'] : '';
+
+        if (!empty($termino_busqueda)) {
+            $bd = BD::obtener();
+            $sentencia = $bd->prepare("SELECT
+                cotizaciones.id, clientes.razonSocial, cotizaciones.descripcion, cotizaciones.fecha, cotizaciones.idCliente
+                FROM clientes INNER JOIN cotizaciones
+                ON cotizaciones.idCliente = clientes.id AND cotizaciones.idUsuario = ?
+                WHERE cotizaciones.id LIKE ? OR clientes.razonSocial LIKE ? OR cotizaciones.descripcion LIKE ? OR cotizaciones.fecha LIKE ?");
+            $idUsuario = SesionService::obtenerIdUsuarioLogueado();
+            $termino = "%$termino_busqueda%";
+            $sentencia->execute([$idUsuario, $termino, $termino, $termino, $termino]);
+            return $sentencia->fetchAll(PDO::FETCH_OBJ);
+        } else {
+        // Si no hay término de búsqueda, devuelve un array vacío
+            return [];
+        }
+    }
 }
