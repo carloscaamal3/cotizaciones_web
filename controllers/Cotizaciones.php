@@ -134,7 +134,7 @@ class Cotizaciones
     {
         $bd = BD::obtener();
         $sentencia = $bd->prepare("select
-            cotizaciones.id, clientes.razonSocial, cotizaciones.descripcion, cotizaciones.fecha, cotizaciones.idCliente
+            cotizaciones.id, clientes.razonSocial, clientes.email, clientes.telefono, cotizaciones.descripcion, cotizaciones.fecha, cotizaciones.idCliente
             from clientes inner join cotizaciones
             on cotizaciones.idCliente = clientes.id and cotizaciones.idUsuario = ?
             where cotizaciones.id = ?;");

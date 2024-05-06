@@ -14,9 +14,31 @@ $ajustes = Ajustes::obtener();
 <div id="app">
     <div class="row">
         <div class="col-sm">
-            <h1>Cotización para <?php echo htmlentities($cotizacion->descripcion) ?></h1>
-            <h4>Cliente: <?php echo htmlentities($cotizacion->razonSocial) ?></h4>
-            <span class="badge badge-pill badge-success"><?php echo htmlentities($cotizacion->fecha) ?></span>
+        <div style="display: flex; justify-content: space-between;">
+    <div>
+        <img src="images/logo.png" alt="Logo">
+    </div>
+    <div style="text-align: right;">
+        <h4>PixelPerfect</h4>
+        <p>Phone: +52 999-175-25-40</p>
+        <p>Mail: carloscaamal3@gmail.com</p>
+    </div>
+</div>
+
+           <!-- <h1>Cotización para <?php echo htmlentities($cotizacion->descripcion) ?></h1>-->
+           <div style="display: flex; justify-content: space-between;">
+    <div>
+        <h6 style="margin: 0;">Cliente:</h6>
+        <p style="margin: 0;"><?php echo htmlentities($cotizacion->razonSocial) ?></p>
+        <p style="margin: 0;"><?php echo htmlentities($cotizacion->telefono) ?></p>
+        <p style="margin: 0;"><?php echo htmlentities($cotizacion->email) ?></p>
+    </div>
+    <div style="text-align: right;">
+    <span class="badge badge-pill badge-success"><?php echo htmlentities($cotizacion->fecha) ?></span>
+    </div>
+</div>
+
+          
             <?php if (!empty($ajustes->mensajePresentacion)): ?>
                 <p><?php echo htmlentities($ajustes->mensajePresentacion) ?></p>
             <?php endif ?>
@@ -101,7 +123,7 @@ $ajustes = Ajustes::obtener();
     </div>
     <div class="row">
         <div class="col-sm">
-            <button id="imprimir-btn" @click="imprimir" class="btn btn-success d-print-none">Imprimir</button>
+            <button @click="imprimir" class="btn btn-success d-print-none">Imprimir</button>
         </div>
     </div>
     <div class="row">
@@ -110,29 +132,8 @@ $ajustes = Ajustes::obtener();
         </div>
     </div>
 </div>
-
-
-
 <script>
-    
-
-document.getElementById("imprimir-btn").addEventListener("click", function() {
-    // Realizar una solicitud AJAX al archivo generar_pdf.php
-    var xhr = new XMLHttpRequest();
-    xhr.open("GET", "includes/genera_pdf.php?id=<?php echo $_GET["id"]; ?>", true);
-    xhr.responseType = "blob"; // Esperamos una respuesta binaria
-    xhr.onload = function() {
-        if (this.status === 200) {
-            // Crear un objeto URL a partir de la respuesta binaria
-            var blob = new Blob([this.response], { type: "application/pdf" });
-            var url = window.URL.createObjectURL(blob);
-            // Abrir el PDF en una nueva pestaña
-            window.open(url);
-        }
-    };
-    xhr.send();
-});
-  /*  document.addEventListener("DOMContentLoaded", () => {
+    document.addEventListener("DOMContentLoaded", () => {
         new Vue({
             el: "#app",
             methods: {
@@ -144,8 +145,5 @@ document.getElementById("imprimir-btn").addEventListener("click", function() {
                 }
             },
         });
-    });*/
-
-
+    });
 </script>
-
