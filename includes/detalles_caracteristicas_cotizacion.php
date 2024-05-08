@@ -95,7 +95,7 @@ $tokenCSRF = Utiles::obtenerTokenCSRF();
                                         <td><strong>% IVA</strong></td>
                                           <!--<td><strong>IVA {{<?php echo htmlentities($iva * 100) ?>}} %</strong></td>-->
                                        <!-- <td class="text-nowrap" ><strong>{{<?php echo htmlentities($costoTotal * $iva) ?> | dinero}}</strong></td>-->
-                                        <td class="text-nowrap" id="ivaCal" >{{<?php echo $ivaCal ?> | dinero}}</td>
+                                        <td class="text-nowrap" name="ivaCal" id="ivaCal" >{{<?php echo $ivaCal ?> | dinero}}</td>
                                     </tr>
                                     <tr>
                                         <tr>
@@ -111,7 +111,7 @@ $tokenCSRF = Utiles::obtenerTokenCSRF();
                                     </tr>-->
                                       <tr>
                                         <td><strong>Total</strong></td>
-                                          <td class="text-nowrap" id="totalConIva">{{<?php echo htmlentities($totalConIva) ?> | dinero}}</td>
+                                          <td class="text-nowrap" name ="totalConIva" id="totalConIva">{{<?php echo htmlentities($totalConIva) ?> | dinero}}</td>
                                         <!--<td class="text-nowrap"><strong>{{<?php echo htmlentities($costoTotal) ?> | dinero}}</strong></td>-->
                                         <td><strong>{{<?php echo $tiempoTotal ?> | minutosATiempo}}</strong></td>
                                         <td> </td>
@@ -137,8 +137,17 @@ $tokenCSRF = Utiles::obtenerTokenCSRF();
                         </div>
                         <div class="form-group">
                             <label for="costo">Costo</label>
-                            <input name="costo" autocomplete="off" required type="number" class="form-control"
+                            <input name="costo" autocomplete="off" id="costo" required type="number" class="form-control"
                                    id="costo" placeholder="Costo">
+                        </div>
+                        <div  class="form-group">
+                        <label for="tiempoEnMinutos">Iva</label>
+                        <select required class="form-control" name="ivaSelect" id="ivaSelect" onchange="actualizarTotal()">
+                                            <option value="0">0%</option>
+                                            <option value="0.008">8%</option>
+                                            <option value="0.16" selected>16%</option>
+                        </select> 
+                        <label name="totalConIva" id="totalConIva">{{<?php echo htmlentities($totalConIva) ?> | dinero}}</labe>
                         </div>
                         <div class="form-group">
                             <label for="tiempoEnMinutos">Tiempo</label>
@@ -231,12 +240,17 @@ $tokenCSRF = Utiles::obtenerTokenCSRF();
 </script>
 <script>
     function actualizarTotal() {
-        var selectIva = document.getElementById('iva');
+        var selectIva = document.getElementById('ivaSelect').value;
+         var costo = document.getElementById('costo').value;
+          console.log("costo", costo)
         var ivaSeleccionado = parseFloat(selectIva.value) || parseFloat(<?php echo $ivaDefault; ?>);
-        console.log("ivaSeleccionado", ivaSeleccionado)
+        console.log("ivaSeleccionado", selectIva)
         var totalSinIva = parseFloat(<?php echo $costoTotal; ?>);
-        var ivaCalculado2 = ivaSeleccionado * totalSinIva
-        var nuevoTotal = totalSinIva * (1 + ivaSeleccionado);
+        var ivaCalculado2 = selectIva * costo
+                console.log("ivaCalculado2", ivaCalculado2)
+        //var ivaCalculado2 = ivaSeleccionado * totalSinIva
+        var nuevoTotal = costo * (1 + ivaSeleccionado);
+           console.log("nuevoTotal", nuevoTotal)
 
         // Actualizar el total en la interfaz
           document.getElementById('totalConIva').innerText = nuevoTotal.toLocaleString('es-MX', {

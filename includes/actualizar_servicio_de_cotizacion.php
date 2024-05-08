@@ -12,6 +12,10 @@ if (
     ||
     empty($_POST["multiplicador"])
     ||
+    empty($_POST["ivaCal"])
+    ||
+    empty($_POST["totalConIva"])
+    ||
     empty($_POST["tokenCSRF"])
 ) {
     exit("Uno o más datos no fueron enviados");
@@ -23,6 +27,8 @@ Cotizaciones::actualizarServicio(
     $_POST["servicio"],
     $_POST["costo"],
     $_POST["tiempoEnMinutos"],
-    $_POST["multiplicador"]
+    $_POST["multiplicador"],
+    $_POST["ivaCal"],
+    $_POST["totalConIva"]
 );
 Utiles::redireccionar("detalles_caracteristicas_cotizacion&id=" . $_POST["idCotizacion"]);

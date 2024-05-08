@@ -70,11 +70,11 @@ class Cotizaciones
         return $sentencia->fetchAll(PDO::FETCH_OBJ);
     }
 
-    public static function agregarServicio($idCotizacion, $servicio, $costo, $tiempoEnMinutos, $multiplicador)
+    public static function agregarServicio($idCotizacion, $servicio, $costo, $tiempoEnMinutos, $multiplicador, $iva, $total)
     {
         $bd = BD::obtener();
-        $sentencia = $bd->prepare("insert into servicios_cotizaciones (idCotizacion, servicio, costo, tiempoEnMinutos, multiplicador)
-            values ((select id from cotizaciones where cotizaciones.idUsuario = ? and cotizaciones.id = ?), ?, ?, ?, ?);");
+        $sentencia = $bd->prepare("insert into servicios_cotizaciones (idCotizacion, servicio, costo, tiempoEnMinutos, multiplicador, iva, total)
+            values ((select id from cotizaciones where cotizaciones.idUsuario = ? and cotizaciones.id = ?), ?, ?, ?, ?, ?, ?);");
         return $sentencia->execute([
             SesionService::obtenerIdUsuarioLogueado(),
             $idCotizacion,
@@ -123,7 +123,7 @@ class Cotizaciones
     {
         $bd = BD::obtener();
         $sentencia = $bd->prepare("select
-            cotizaciones.id, clientes.razonSocial, cotizaciones.descripcion, cotizaciones.fecha
+            cotizaciones.id, clientes.razonSocial, cotizaciones.descripcion, cotizaciones.fecha, cotizaciones.total
             from clientes inner join cotizaciones
             on cotizaciones.idCliente = clientes.id and cotizaciones.idUsuario = ?;");
         $sentencia->execute([SesionService::obtenerIdUsuarioLogueado()]);
@@ -165,7 +165,7 @@ class Cotizaciones
         $bd = BD::obtener();
         $desplazamiento = ($pagina_actual - 1) * $resultados_por_pagina;
         $sentencia = $bd->prepare("SELECT
-            cotizaciones.id, clientes.razonSocial, cotizaciones.descripcion, cotizaciones.fecha
+            cotizaciones.id, clientes.razonSocial, cotizaciones.descripcion, cotizaciones.fecha, cotizaciones.total
             FROM clientes INNER JOIN cotizaciones
             ON cotizaciones.idCliente = clientes.id AND cotizaciones.idUsuario = ?
             LIMIT ? OFFSET ?;");
@@ -181,7 +181,7 @@ class Cotizaciones
         if (!empty($termino_busqueda)) {
             $bd = BD::obtener();
             $sentencia = $bd->prepare("SELECT
-                cotizaciones.id, clientes.razonSocial, cotizaciones.descripcion, cotizaciones.fecha, cotizaciones.idCliente
+                cotizaciones.id, clientes.razonSocial, cotizaciones.descripcion, cotizaciones.fecha, cotizaciones.idCliente, cotizaciones.total
                 FROM clientes INNER JOIN cotizaciones
                 ON cotizaciones.idCliente = clientes.id AND cotizaciones.idUsuario = ?
                 WHERE cotizaciones.id LIKE ? OR clientes.razonSocial LIKE ? OR cotizaciones.descripcion LIKE ? OR cotizaciones.fecha LIKE ?");

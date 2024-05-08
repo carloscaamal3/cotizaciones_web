@@ -76,7 +76,7 @@ if (!empty($_GET['q'])) {
                         <td><?php echo htmlentities($cotizacion->razonSocial) ?></td>
                         <td><?php echo htmlentities($cotizacion->descripcion) ?></td>
                         <td><?php echo htmlentities($cotizacion->fecha) ?></td>
-                        <!--<td>$<?php echo htmlentities(number_format($cotizacion->total, 2, '.', '.')) ?></td>-->
+                        <td>$<?php echo htmlentities(number_format($cotizacion->total, 2, '.', '.')) ?></td>
 
                         <td>
                             <a class="btn btn-info"

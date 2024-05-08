@@ -10,11 +10,23 @@ if (
     ||
     empty($_POST["multiplicador"])
     ||
+    empty($_POST["ivaCal"])
+    ||
+    empty($_POST["totalConIva"])
+    ||
     empty($_POST["tokenCSRF"])
 ) {
     exit;
 }
 Utiles::salirSiTokenCSRFNoCoincide($_POST["tokenCSRF"]);
 
-Cotizaciones::agregarServicio($_POST["idCotizacion"], $_POST["servicio"], $_POST["costo"], $_POST["tiempoEnMinutos"], $_POST["multiplicador"]);
+Cotizaciones::agregarServicio(
+    $_POST["idCotizacion"], 
+    $_POST["servicio"],
+    $_POST["costo"], 
+    $_POST["tiempoEnMinutos"], 
+    $_POST["multiplicador"],
+    $_POST["ivaCal"],
+    $_POST["totalConIva"]
+);
 Utiles::redireccionar("detalles_caracteristicas_cotizacion&id=" . $_POST["idCotizacion"]);
