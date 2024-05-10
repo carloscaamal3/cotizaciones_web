@@ -70,18 +70,20 @@ class Cotizaciones
         return $sentencia->fetchAll(PDO::FETCH_OBJ);
     }
 
-    public static function agregarServicio($idCotizacion, $servicio, $costo, $tiempoEnMinutos, $multiplicador, $iva, $total)
+    public static function agregarServicio($idCotizacion, $servicio, $costo, $tiempoEnMinutos, $multiplicador, $ivaSelect, $totalConIva)
     {
         $bd = BD::obtener();
         $sentencia = $bd->prepare("insert into servicios_cotizaciones (idCotizacion, servicio, costo, tiempoEnMinutos, multiplicador, iva, total)
-            values ((select id from cotizaciones where cotizaciones.idUsuario = ? and cotizaciones.id = ?), ?, ?, ?, ?, ?, ?);");
+        values ((select id from cotizaciones where cotizaciones.idUsuario = ? and cotizaciones.id = ?), ?, ?, ?, ?, ?, ?);");
         return $sentencia->execute([
             SesionService::obtenerIdUsuarioLogueado(),
             $idCotizacion,
             $servicio,
             $costo,
             $tiempoEnMinutos,
-            $multiplicador
+            $multiplicador,
+            $ivaSelect,
+            $totalConIva
         ]);
     }
 
