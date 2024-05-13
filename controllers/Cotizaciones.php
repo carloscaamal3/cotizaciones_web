@@ -32,7 +32,7 @@ class Cotizaciones
     public static function obtenerServicioPorId($idServicio)
     {
         $bd = BD::obtener();
-        $sentencia = $bd->prepare("select servicios_cotizaciones.id, idCotizacion, servicio, costo, tiempoEnMinutos, multiplicador
+        $sentencia = $bd->prepare("select servicios_cotizaciones.id, idCotizacion, servicio, costo, tiempoEnMinutos, multiplicador, iva, total 
             from servicios_cotizaciones
             inner join cotizaciones on cotizaciones.idUsuario = ? and servicios_cotizaciones.id = ?");
         $sentencia->execute([SesionService::obtenerIdUsuarioLogueado(), $idServicio]);
@@ -70,8 +70,9 @@ class Cotizaciones
         return $sentencia->fetchAll(PDO::FETCH_OBJ);
     }
 
-    public static function agregarServicio($idCotizacion, $servicio, $costo, $tiempoEnMinutos, $multiplicador, $ivaSelect, $totalConIva)
+    public static function agregarServicio($idCotizacion, $servicio, $costo, $tiempoEnMinutos, $multiplicador, $iva, $total)
     {
+        var_dump("iva", $iva);
         $bd = BD::obtener();
         $sentencia = $bd->prepare("insert into servicios_cotizaciones (idCotizacion, servicio, costo, tiempoEnMinutos, multiplicador, iva, total)
         values ((select id from cotizaciones where cotizaciones.idUsuario = ? and cotizaciones.id = ?), ?, ?, ?, ?, ?, ?);");
@@ -82,8 +83,8 @@ class Cotizaciones
             $costo,
             $tiempoEnMinutos,
             $multiplicador,
-            $ivaSelect,
-            $totalConIva
+            $iva,
+            $total
         ]);
     }
 

@@ -30,6 +30,21 @@ $tokenCSRF = Utiles::obtenerTokenCSRF();
             <input value="<?php echo $servicio->costo; ?>" name="costo" autocomplete="off" required type="number"
                    class="form-control" id="costo" placeholder="Costo especificado en USD">
         </div>
+        <div  class="form-group">
+                        <label for="tiempoEnMinutos">Iva</label>
+                        <select required class="form-control" name="iva" id="iva" value="<?php echo $servicio->iva ?>" onchange="actualizarTotal()">
+                                            <option value="0" selected>0%</option>
+                                            <option value="0.08">8%</option>
+                                            <option value="0.16" >16%</option>
+                        </select> 
+                        </div>
+                        <div  class="form-group">
+                        <label for="subTotal">Subtotal:</label>
+                        <!--<input  class="form-control" readonly type="text" name="subTotal" id="subTotal" value="<?php echo $costo ?>">-->
+                        <label for="totalConIva">Total:</label>
+                        <input  class="form-control" readonly type="text" name="total" id="total"  value="<?php echo $servicio->total ?>">
+                        <!--<label type="text" name="total" id="total" value="<?php echo htmlspecialchars($total); ?>">-->
+                        </div>
         <div class="form-group">
             <label for="tiempoEnMinutos">Tiempo</label>
             <input value="<?php echo $servicio->tiempoEnMinutos; ?>" name="tiempoEnMinutos" autocomplete="off" required
